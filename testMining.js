@@ -15,6 +15,7 @@ let myStartBDBAssets = '4926.890750483209';
       let myCurrentBDBAssets = await getMyBDBAssets()
       let BDBcost = commonMethod.accSub(myStartBDBAssets, myCurrentBDBAssets[0])
 
+
       console.warn(`共花费${BDBcost}BDB`)
       console.warn('此次刷单结束！')
     } catch (e) {
@@ -29,13 +30,23 @@ async function createOrder(symbol) {
   let buyAndSalePrice = await commonMethod.getLatelyBuyAndSalePrice(symbol)
 
 
-  let targetPrice = commonMethod.getAverage(buyAndSalePrice[0].price, buyAndSalePrice[1].price)
+  // let targetPrice = commonMethod.getAverage(buyAndSalePrice[0].price, buyAndSalePrice[1].price)
+  let priceDiff = commonMethod.accMul(commonMethod.accSub(buyAndSalePrice[1].price, buyAndSalePrice[0].price), 1 / 4)
+
+  let targetPrice = commonMethod.accAdd(buyAndSalePrice[0].price, commonMethod.accMul(priceDiff, 3))
+
+  do {
+    let upFloat = commonMethod.accMul(Math.random(), priceDiff)
+    targetPrice = commonMethod.accAdd(upFloat, targetPrice)
+  } while (targetPrice > buyAndSalePrice[1].price)
+
+
 
   console.log(`${targetSymbol}市场最高买单价格为:${buyAndSalePrice[0].price} 最低卖单价格为:${buyAndSalePrice[1].price} 挂单的目标价格为${targetPrice}`)
 
   await commonMethod.createSaleOrder(targetPrice, 2000, symbol)
 
-  await commonMethod.sleep(20)
+  await commonMethod.sleep(5)
 
   await commonMethod.createBuyOrder(targetPrice, 2000, symbol)
 
