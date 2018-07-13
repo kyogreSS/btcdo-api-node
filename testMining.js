@@ -5,7 +5,7 @@ var Decimal = require('Decimal.js')
 let targetSymbol = 'ICC_ETH'
 let tagetCurrency = 'ICC'
 let useCurrent = 'ETH';
-let myStartBDBAssets = '4926.890750483209';
+let myStartBDBAssets = '5288.658803977613';
 
 
 (async function() {
