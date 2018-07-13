@@ -135,15 +135,15 @@ function createOrder({
 
     if (!orderType) {
         openWarn && console.warn('请输入订单类型！可输入的类型有：BUY_LIMIT：限价买单 SELL_LIMIT：限价卖单 CANCEL_BUY_LIMIT：限价买单撤单 CANCEL_SELL_LIMIT：限价卖单撤单')
-        return Promise.reject()
+        return 'type wrong'
     }
     if ((orderType === 'SELL_LIMIT' || orderType === 'BUY_LIMIT') && (!price || !amount)) {
         openWarn && console.warn('挂单请输入价格和数量')
-        return Promise.reject()
+        return 'no limit'
     }
     if ((orderType === 'CANCEL_BUY_LIMIT' || orderType === 'CANCEL_SELL_LIMIT') && (!targetOrderId)) {
         openWarn && console.warn('撤单请输入订单ID')
-        return Promise.reject()
+        return 'no order id'
     }
     if (customFeatures != 65536) openWarn && console.warn('此笔交易不开启BDB燃烧')
 
